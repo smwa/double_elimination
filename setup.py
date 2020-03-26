@@ -4,7 +4,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="double_elimination-smwa",
+    name="double_elimination",
     version="1.0.0",
     author="Michael Smith",
     author_email="michael.smith.ok@gmail.com",
