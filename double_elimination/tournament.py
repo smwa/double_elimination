@@ -46,7 +46,6 @@ class Tournament:
             incoming_participants = new_participants
 
         for loser_round in range(0, len(one_loss_participants), 2):
-            print(loser_round)
             one_loss_participants[loser_round].reverse()
 
         if extended_round_one:
@@ -83,7 +82,6 @@ class Tournament:
                 one_loss_participants[loser_round + 1].extend(incoming_participants)
             else:
                 # Grand finals
-                print(len(incoming_participants))
                 match = Match(incoming_participants[0], winner)
                 self.__matches.append(match)
 
@@ -118,9 +116,8 @@ class Tournament:
             return matches[0]
         return None
 
-    def add_win(self, match, competitor):
+    def add_win(self, competitor):
         """
-        Set the victor of a specific match, given the Match object and the competitor string/object.
-        This should be used alongside get_active_match_for_competitor().
+        Set the victor of a match, given the competitor string/object.
         """
-        match.set_winner(competitor)
+        self.get_active_match_for_competitor(competitor).set_winner(competitor)

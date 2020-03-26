@@ -118,9 +118,8 @@ class Tournament:
             return matches[0]
         return None
 
-    def add_win(self, match, competitor):
+    def add_win(self, competitor):
         """
-        Set the victor of a specific match, given the Match object and the competitor string/object.
-        This should be used alongside get_active_match_for_competitor().
+        Set the victor of a match, given the competitor string/object.
         """
-        match.set_winner(competitor)
+        self.get_active_match_for_competitor(competitor).set_winner(competitor)

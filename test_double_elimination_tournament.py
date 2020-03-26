@@ -9,7 +9,7 @@ def printMatches(matches):
 
 
 def add_win(det, competitor):
-    det.add_win(det.get_active_match_for_competitor(competitor), competitor)
+    det.add_win(competitor)
 
 
 def checkActiveMatches(det, competitorPairs):
@@ -195,12 +195,12 @@ if __name__ == '__main__':
 
     print("Starting performance test")
 
-    n = 4096
+    n = 1024
     det = DoubleEliminationTournament(range(n))
     matches = det.get_active_matches()
     while len(matches) > 0:
         for match in matches:
-            det.add_win(match, match.get_participants()[0].get_competitor())
+            det.add_win(match.get_participants()[0].get_competitor())
         matches = det.get_active_matches()
 
     print("Double elimination tests passed")
