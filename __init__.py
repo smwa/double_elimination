@@ -1,1 +1,1 @@
-from .double_elimination.double_elimination_tournament import DoubleEliminationTournament, Match, Participant
+from .double_elimination import Tournament, Match, Participant

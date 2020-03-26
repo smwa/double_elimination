@@ -3,7 +3,7 @@ import math
 from double_elimination.match import Match
 from double_elimination.participant import Participant
 
-class DoubleEliminationTournament:
+class Tournament:
     def __init__(self, competitors_list):
         assert len(competitors_list) > 1
         self.__matches = []

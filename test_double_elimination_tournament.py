@@ -1,4 +1,4 @@
-from double_elimination import DoubleEliminationTournament
+from double_elimination import Tournament as DoubleEliminationTournament
 
 def printMatches(matches):
     print("Active Matches:")
