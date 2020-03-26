@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="double_elimination",
-    version="1.0.0",
+    version="1.1.0",
     author="Michael Smith",
     author_email="michael.smith.ok@gmail.com",
     description="A double elimination tournament match handler.",
