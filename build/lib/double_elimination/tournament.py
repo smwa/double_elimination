@@ -46,7 +46,6 @@ class Tournament:
             incoming_participants = new_participants
 
         for loser_round in range(0, len(one_loss_participants), 2):
-            print(loser_round)
             one_loss_participants[loser_round].reverse()
 
         if extended_round_one:
@@ -83,7 +82,6 @@ class Tournament:
                 one_loss_participants[loser_round + 1].extend(incoming_participants)
             else:
                 # Grand finals
-                print(len(incoming_participants))
                 match = Match(incoming_participants[0], winner)
                 self.__matches.append(match)
 
