@@ -84,8 +84,8 @@ class Tournament:
     def getMatches(self):
         return self.__matches
 
-    def getActiveMatchForCompetitor(self, id):
-        matches = [match for match in self.getActiveMatches() if id in [participant.getCompetitor() for participant in match.getParticipants()]]
+    def getActiveMatchForCompetitor(self, competitor):
+        matches = [match for match in self.getActiveMatches() if competitor in [participant.getCompetitor() for participant in match.getParticipants()]]
         if len(matches) > 0:
             return matches[0]
         return None
