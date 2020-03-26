@@ -1,0 +1,25 @@
+Metadata-Version: 2.1
+Name: double-elimination
+Version: 1.0.0
+Summary: A double elimination tournament match handler.
+Home-page: https://github.com/smwa/double_elimination
+Author: Michael Smith
+Author-email: michael.smith.ok@gmail.com
+License: UNKNOWN
+Description: # Double Elimination
+        This is a python package to manage the matches for a double elimination tournament.
+        
+        It doesn't currently handle the grand finals match if the loser wins the first match.
+        
+        For usage, see the test files.
+        
+        Create an issue if you have any suggested features, changes, or documentation. Pull requests welcome.
+        
+        Install with `pip install double_elimination`
+        
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown

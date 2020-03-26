@@ -1,0 +1,10 @@
+README.md
+setup.py
+double_elimination/__init__.py
+double_elimination/match.py
+double_elimination/participant.py
+double_elimination/tournament.py
+double_elimination.egg-info/PKG-INFO
+double_elimination.egg-info/SOURCES.txt
+double_elimination.egg-info/dependency_links.txt
+double_elimination.egg-info/top_level.txt
