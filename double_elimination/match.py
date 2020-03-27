@@ -21,10 +21,10 @@ class Match:
         """
         When the match is over, set the winner competitor here and the loser will be set too.
         """
-        if competitor is self.__left_participant.get_competitor():
+        if competitor == self.__left_participant.get_competitor():
             self.__winner.set_competitor(competitor)
             self.__loser.set_competitor(self.__right_participant.get_competitor())
-        elif competitor is self.__right_participant.get_competitor():
+        elif competitor == self.__right_participant.get_competitor():
             self.__winner.set_competitor(competitor)
             self.__loser.set_competitor(self.__left_participant.get_competitor())
         else:
