@@ -46,11 +46,13 @@ class Tournament:
                 losers_by_round.append(losers)
             incoming_participants = next_round_participants
 
+        if winners_number_of_byes > 0 and len(losers_by_round) > 1:
+            losers_by_round[1].extend(losers_by_round[0])
+            losers_by_round = losers_by_round[1:]
+
         for loser_round in range(0, len(losers_by_round), 2):
             losers_by_round[loser_round].reverse()
-
-        # while len(losers_by_round) < (math.ceil(math.log2(next_higher_power_of_two)) + 1):
-        #     losers_by_round.append([])
+        
         winner = incoming_participants[0]
 
         index = 0
