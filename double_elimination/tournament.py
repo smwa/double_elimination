@@ -19,71 +19,72 @@ class Tournament:
     def __init__(self, competitors_list):
         assert len(competitors_list) > 1
         self.__matches = []
-        number_of_participants = int(math.pow(2, math.ceil(math.log2(len(competitors_list)))))
-        number_of_byes = number_of_participants - len(competitors_list)
+        next_higher_power_of_two = int(math.pow(2, math.ceil(math.log2(len(competitors_list)))))
+        winners_number_of_byes = next_higher_power_of_two - len(competitors_list)
         incoming_participants = list(map(Participant, competitors_list))
-        incoming_participants.extend([None] * number_of_byes)
+        incoming_participants.extend([None] * winners_number_of_byes)
 
-        one_loss_participants = []
-        extended_round_one = (number_of_byes > 0)
-        # TODO Winners needs to keep everyone in round 1 until they've all played. Maybe the loser's round should be the min(number of matches played)
+        losers_by_round = []
         while len(incoming_participants) > 1:
-            one_loss_participants.append([])
+            losers = []
             half_length = int(len(incoming_participants)/2)
             first = incoming_participants[0:half_length]
             last = incoming_participants[half_length:]
             last.reverse()
-            new_participants = []
+            next_round_participants = []
             for participant_pair in zip(first, last):
                 if participant_pair[1] is None:
-                    new_participants.append(participant_pair[0])
+                    next_round_participants.append(participant_pair[0])
+                elif participant_pair[0] is None:
+                    next_round_participants.append(participant_pair[1])
                 else:
                     match = Match(participant_pair[0], participant_pair[1])
-                    new_participants.append(match.get_winner_participant())
-                    target_loser_round = len(one_loss_participants) - 1
-                    one_loss_participants[target_loser_round].append(match.get_loser_participant())
+                    next_round_participants.append(match.get_winner_participant())
+                    losers.append(match.get_loser_participant())
                     self.__matches.append(match)
-            incoming_participants = new_participants
+            if len(losers) > 0:
+                losers_by_round.append(losers)
+            incoming_participants = next_round_participants
 
-        for loser_round in range(0, len(one_loss_participants), 2):
-            one_loss_participants[loser_round].reverse()
+        for loser_round in range(0, len(losers_by_round), 2):
+            losers_by_round[loser_round].reverse()
 
-        if extended_round_one:
-            one_loss_participants[1].extend(one_loss_participants[0])
-            del one_loss_participants[0]
-        while len(one_loss_participants) < (math.ceil(math.log2(number_of_participants)) + 1):
-            one_loss_participants.append([])
+        # while len(losers_by_round) < (math.ceil(math.log2(next_higher_power_of_two)) + 1):
+        #     losers_by_round.append([])
         winner = incoming_participants[0]
 
-        for loser_round in range(len(one_loss_participants)):        
-            incoming_participants = one_loss_participants[loser_round]
-            number_of_participants = int(math.pow(2, math.ceil(math.log2(len(incoming_participants)))))
-            number_of_byes = number_of_participants - len(incoming_participants)
-            incoming_participants.extend([None] * number_of_byes)
+        index = 0
+        incoming_participants = []
+        for losers in losers_by_round:
+            incoming_participants = losers
 
             if len(incoming_participants) > 1:
+                if len(incoming_participants) % 2 == 1:
+                    incoming_participants.append(None)
                 half_length = math.ceil(len(incoming_participants)/2)
                 first = incoming_participants[0:half_length]
                 last = incoming_participants[half_length:]
                 last.reverse()
-                winner_and_bye_participants = []
+                incoming_participants = []
                 for participant_pair in zip(first, last):
                     if participant_pair[0] is None:
-                        winner_and_bye_participants.append(participant_pair[1])
+                        incoming_participants.append(participant_pair[1])
                     elif participant_pair[1] is None:
-                        winner_and_bye_participants.append(participant_pair[0])
+                        incoming_participants.append(participant_pair[0])
                     else:
                         match = Match(participant_pair[0], participant_pair[1])
-                        winner_and_bye_participants.append(match.get_winner_participant())
+                        incoming_participants.append(match.get_winner_participant())
                         self.__matches.append(match)
-                incoming_participants = winner_and_bye_participants
-            if loser_round + 1 < len(one_loss_participants):
-                # Next round exists
-                one_loss_participants[loser_round + 1].extend(incoming_participants)
-            else:
-                # Grand finals
-                match = Match(incoming_participants[0], winner)
-                self.__matches.append(match)
+                if len(incoming_participants) > 0:
+                    if len(losers_by_round) <= index + 1:
+                        losers_by_round.append(incoming_participants)
+                    else:
+                        losers_by_round[index + 1].extend(incoming_participants)
+            elif len(losers_by_round) > index + 1:
+                losers_by_round[index + 1].extend(incoming_participants)
+            index += 1
+        match = Match(incoming_participants[0], winner)
+        self.__matches.append(match)
 
     def __iter__(self):
         return iter(self.__matches)

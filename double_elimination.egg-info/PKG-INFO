@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: double-elimination
-Version: 1.1.0
+Version: 1.1.2
 Summary: A double elimination tournament match handler.
 Home-page: https://github.com/smwa/double_elimination
 Author: Michael Smith
