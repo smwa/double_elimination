@@ -59,6 +59,10 @@ class Tournament:
         for __ in losers_by_round:
             empty_by_round.append([])
         losers_by_round = list(itertools.chain(*zip(losers_by_round, empty_by_round)))
+        if len(losers_by_round) > 2:
+            new_losers = [losers_by_round[0]]
+            new_losers.extend(losers_by_round[2:])
+            losers_by_round = new_losers
 
         for loser_round in range(0, len(losers_by_round), 4):
             losers_by_round[loser_round].reverse()
