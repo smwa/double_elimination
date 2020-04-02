@@ -2,6 +2,7 @@
 This defines a double elimination 'Tournament' object.
 """
 import math
+import itertools
 
 from double_elimination.match import Match
 from double_elimination.participant import Participant
@@ -24,6 +25,9 @@ class Tournament:
         incoming_participants = list(map(Participant, competitors_list))
         incoming_participants.extend([None] * winners_number_of_byes)
 
+        last_winner = None
+        last_loser = None
+
         losers_by_round = []
         while len(incoming_participants) > 1:
             losers = []
@@ -40,6 +44,7 @@ class Tournament:
                 else:
                     match = Match(participant_pair[0], participant_pair[1])
                     next_round_participants.append(match.get_winner_participant())
+                    last_winner = match.get_winner_participant()
                     losers.append(match.get_loser_participant())
                     self.__matches.append(match)
             if len(losers) > 0:
@@ -50,10 +55,13 @@ class Tournament:
             losers_by_round[1].extend(losers_by_round[0])
             losers_by_round = losers_by_round[1:]
 
-        for loser_round in range(0, len(losers_by_round), 2):
+        empty_by_round = []
+        for __ in losers_by_round:
+            empty_by_round.append([])
+        losers_by_round = list(itertools.chain(*zip(losers_by_round, empty_by_round)))
+
+        for loser_round in range(0, len(losers_by_round), 4):
             losers_by_round[loser_round].reverse()
-        
-        winner = incoming_participants[0]
 
         index = 0
         incoming_participants = []
@@ -61,8 +69,10 @@ class Tournament:
             incoming_participants = losers
 
             if len(incoming_participants) > 1:
-                if len(incoming_participants) % 2 == 1:
-                    incoming_participants.append(None)
+                next_higher_power_of_two = int(math.pow(2, math.ceil(math.log2(len(incoming_participants)))))
+                number_of_byes = next_higher_power_of_two - len(incoming_participants)
+                incoming_participants.extend([None] * number_of_byes)
+
                 half_length = math.ceil(len(incoming_participants)/2)
                 first = incoming_participants[0:half_length]
                 last = incoming_participants[half_length:]
@@ -84,8 +94,10 @@ class Tournament:
                         losers_by_round[index + 1].extend(incoming_participants)
             elif len(losers_by_round) > index + 1:
                 losers_by_round[index + 1].extend(incoming_participants)
+            if len(incoming_participants) == 1:
+                last_loser = incoming_participants[0]
             index += 1
-        match = Match(incoming_participants[0], winner)
+        match = Match(last_winner, last_loser)
         self.__matches.append(match)
 
     def __iter__(self):
