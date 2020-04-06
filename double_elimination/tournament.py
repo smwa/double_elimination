@@ -102,6 +102,7 @@ class Tournament:
                 last_loser = incoming_participants[0]
             index += 1
         match = Match(last_winner, last_loser)
+        self.__winner = match.get_winner_participant()
         self.__matches.append(match)
 
     def __iter__(self):
@@ -134,6 +135,15 @@ class Tournament:
         if len(matches) > 0:
             return matches[0]
         return None
+
+    def get_winners(self):
+        """
+        Returns None if the tournament is done, otherwise
+        returns list of the one victor.
+        """
+        if len(self.get_active_matches()) > 0:
+            return None
+        return [self.__winner.get_competitor()]
 
     def add_win(self, competitor):
         """
