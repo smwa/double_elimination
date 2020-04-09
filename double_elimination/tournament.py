@@ -16,8 +16,9 @@ class Tournament:
     It takes in a list of competitors, which can be strings or any type of Python object,
     but they should be unique. They should be ordered by a seed, with the first entry being the most
     skilled and the last being the least. They can also be randomized before creating the instance.
+    Optional options dict fields:
     """
-    def __init__(self, competitors_list):
+    def __init__(self, competitors_list, options={}):
         assert len(competitors_list) > 1
         self.__matches = []
         next_higher_power_of_two = int(math.pow(2, math.ceil(math.log2(len(competitors_list)))))
@@ -120,21 +121,18 @@ class Tournament:
         """
         return self.__matches
 
-    def get_active_match_for_competitor(self, competitor):
+    def get_active_matches_for_competitor(self, competitor):
         """
         Given the string or object of the competitor that was supplied
         when creating the tournament instance,
-        returns a Match that they are currently playing in,
-        or None if they are not up to play.
+        returns a list of Match's that they are currently playing in.
         """
         matches = []
         for match in self.get_active_matches():
             competitors = [participant.get_competitor() for participant in match.get_participants()]
             if competitor in competitors:
                 matches.append(match)
-        if len(matches) > 0:
-            return matches[0]
-        return None
+        return matches
 
     def get_winners(self):
         """
@@ -145,8 +143,8 @@ class Tournament:
             return None
         return [self.__winner.get_competitor()]
 
-    def add_win(self, competitor):
+    def add_win(self, match, competitor):
         """
-        Set the victor of a match, given the competitor string/object.
+        Set the victor of a match, given the competitor string/object and match.
         """
-        self.get_active_match_for_competitor(competitor).set_winner(competitor)
+        match.set_winner(competitor)
