@@ -31,6 +31,6 @@ assert matchThree.is_ready_to_start() is True
 matchThree.set_winner('2')
 assert matchThree.is_ready_to_start() is False
 winner = matchThree.get_winner_participant().get_competitor()
-assert winner is '2', winner
+assert winner == '2', winner
 
 print("Match tests passed")
