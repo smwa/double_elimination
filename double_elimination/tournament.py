@@ -109,6 +109,11 @@ class Tournament:
     def __iter__(self):
         return iter(self.__matches)
 
+    def __repr__(self) -> str:
+        winner = self.__winner
+        num_matches = len(self.__matches)
+        return f'<Tournament winner={winner} num_matches={num_matches}>'
+
     def get_active_matches(self):
         """
         Returns a list of all matches that are ready to be played.
