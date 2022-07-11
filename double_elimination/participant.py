@@ -11,6 +11,9 @@ class Participant:
     def __init__(self, competitor=None):
         self.competitor = competitor
 
+    def __repr__(self) -> str:
+        return f'<Participant {self.competitor}>'
+
     def get_competitor(self):
         """
         Return the competitor that was set,

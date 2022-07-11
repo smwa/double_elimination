@@ -17,6 +17,15 @@ class Match:
         self.__winner = Participant()
         self.__loser = Participant()
 
+    def __repr__(self) -> str:
+        left = self.__left_participant
+        right = self.__right_participant
+        winner = self.__winner
+        loser = self.__loser
+        return (
+            f'<Match left={left} right={right} winner={winner} loser={loser}>'
+        )
+
     def set_winner(self, competitor):
         """
         When the match is over, set the winner competitor here and the loser will be set too.
