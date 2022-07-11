@@ -34,7 +34,7 @@ class Tournament:
         # loser's brackets. Later, we will assemble these into the finals match.
         last_winner = None
         last_loser = None
-        
+
         losers_by_round = []
         while len(incoming_participants) > 1:
             losers = []
@@ -97,8 +97,7 @@ class Tournament:
             new_losers.extend(losers_by_round[2:])
             losers_by_round = new_losers
 
-        # Reverse every 4 rounds ( which in a way corresponds to 2 real rounds )
-        # to balance home/away left/right balance.
+        # Reverse participants every 4 loser's bracket rounds.
         for loser_round in range(0, len(losers_by_round), 4):
             losers_by_round[loser_round].reverse()
 
@@ -146,7 +145,7 @@ class Tournament:
                         losers_by_round.append(incoming_participants)
                     # Otherwise, if there is another round
                     else:
-                        # Send our participants to that round.
+                        # Send our (outputted) participants to that round.
                         losers_by_round[index + 1].extend(incoming_participants)
             # If there are 0 or 1 participants in this round, and there is
             # a future round, send the participants there.
@@ -161,9 +160,7 @@ class Tournament:
         # Generate finals match.
         match = Match(last_winner, last_loser)
         # The winner of the overall tournament is the winner of the
-        # finals match*.
-        # [*] Unless grand-finals are enabled. In that case, the .__winner
-        # field will be adjusted on-the-fly.
+        # finals match.
         self.__winner = match.get_winner_participant()
         self.__matches.append(match)
 
