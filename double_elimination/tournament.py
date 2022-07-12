@@ -18,10 +18,11 @@ class Tournament:
     skilled and the last being the least. They can also be randomized before creating the instance.
     Optional options dict fields:
     """
-    def __init__(self, competitors_list, options={}):
+    def __init__(self, competitors_list, bracket_reset_finals=True):
         # Only tournaments with 2 or more competitors are valid.
         assert len(competitors_list) > 1
         self.__matches = []
+        self.__bracket_reset_finals = bracket_reset_finals
         # Find minimum 'n' such that 2^n >= number of competitors
         next_higher_power_of_two = int(math.pow(2, math.ceil(math.log2(len(competitors_list)))))
         # Since the bracket is fundamentally a binary tree with 2^n nodes,
@@ -158,11 +159,20 @@ class Tournament:
             index += 1
 
         # Generate finals match.
-        match = Match(last_winner, last_loser)
-        # The winner of the overall tournament is the winner of the
-        # finals match.
-        self.__winner = match.get_winner_participant()
-        self.__matches.append(match)
+        # Important: the incoming winner should always be the first participant to determine bracket reset
+        finals_match = Match(last_winner, last_loser)
+        self.__matches.append(finals_match)
+        self.__finals_match = finals_match
+        
+        if bracket_reset_finals:
+            bracket_reset_finals_match = Match(finals_match.get_winner_participant(), finals_match.get_loser_participant())
+            self.__matches.append(bracket_reset_finals_match)
+            # The winner of the overall tournament is the winner of the
+            # bracket reset finals match.
+            self.__winner = bracket_reset_finals_match.get_winner_participant()
+            self.__bracket_reset_finals_match = bracket_reset_finals_match
+        else:
+            self.__winner = finals_match.get_winner_participant()
 
     def __iter__(self):
         return iter(self.__matches)
@@ -211,3 +221,13 @@ class Tournament:
         Set the victor of a match, given the competitor string/object and match.
         """
         match.set_winner(competitor)
+        # If we show a match after the winner of the lower bracket beats the winner of the upper bracket
+        if self.__bracket_reset_finals:
+            finals = self.__finals_match
+            bracket_reset = self.__bracket_reset_finals_match
+            # If the finals match is played but the bracket reset match is not
+            if finals.get_winner_participant().get_competitor() is not None:
+                if bracket_reset.get_winner_participant().get_competitor() is None:
+                    # If the incoming winner of the finals match won the finals match, then don't play the reset
+                    if finals.get_winner_participant().get_competitor() is finals.get_participants()[0].get_competitor():
+                        self.add_win(bracket_reset, finals.get_winner_participant().get_competitor())

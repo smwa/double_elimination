@@ -53,12 +53,22 @@ if __name__ == '__main__':
     except AssertionError:
         pass
 
-    # 2 competitors
+    # 2 competitors, bracket reset
     det = DoubleEliminationTournament(rangeBase1(2))
     checkActiveMatches(det, [[1, 2]])
     add_win(det, 1)
     checkActiveMatches(det, [[1, 2]])
     add_win(det, 2)
+    checkActiveMatches(det, [[2, 1]])
+    add_win(det, 2)
+    checkActiveMatches(det, [])
+
+    # 2 competitors, no bracket reset
+    det = DoubleEliminationTournament(rangeBase1(2))
+    checkActiveMatches(det, [[1, 2]])
+    add_win(det, 1)
+    checkActiveMatches(det, [[1, 2]])
+    add_win(det, 1)
     checkActiveMatches(det, [])
 
     # 3 competitors
